@@ -1,17 +1,17 @@
 # h2o
 
-The verification algorithm (a XTEA variant) is implemented in H2OC, a high-level language that resembles C. Please refer to [h2o.h2oc](./h2o.h2oc) for the details of the algorithm.
+The verification algorithm (an XTEA variant) is implemented in H2OC, a high-level language that resembles C. Please refer to [h2o.h2oc](./h2o.h2oc) for the details of the algorithm.
 
 [h2o.h2oc](./h2o.h2oc) gets compiled by `h2occ`, a (not-yet-opensourced) subleq compiler collection that transforms programs written in H2OC into a subleq program.
 
-The subleq program is then embeded into and executed by a subleq emulator (which is the challenge `h2o` given to the players).
+The subleq program is then embedded into and executed by a subleq emulator (which is the challenge `h2o` given to the players).
 
 Generally speaking, the h2occ pipeline consists of two stages:
 
 1. Compile: H2OC -> H2OASM
 2. Assemble: H2OASM -> Subleq program
 
-H2OASM is an assembly language that describes operations in a virtual architecture H2OArch that resembles the x64 architecture. For example, it contains some general registers, stack pointers and I/O interrupts. Every assembly instruction in H2OASM has a one-to-one mapping to a fixed subleq sequence. For instance, the implementations for `sub reg, reg` and `add reg, reg` are:
+H2OASM is an assembly language that describes operations in a virtual architecture H2OArch that resembles the x64 architecture. For example, it contains some general registers, stack pointers, and I/O interrupts. Every assembly instruction in H2OASM has a one-to-one mapping to a fixed subleq sequence. For instance, the implementations for `sub reg, reg` and `add reg, reg` are:
 
 ```
 > sub reg0, reg1
