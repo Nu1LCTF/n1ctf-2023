@@ -1,0 +1,86 @@
+int lshift32(int v, int shift) {
+    for(int i=0;i<shift;i+=1) {
+        v *= 2;
+    }
+    return v % 0x100000000;
+}
+
+int rshift32(int v, int shift) {
+    for(int i=0;i<shift;i+=1) {
+        v /= 2;
+    }
+    return v % 0x100000000;
+}
+
+void encipher(int num_rounds, int v[2], int key[4]) {
+    int v0=v[0], v1=v[1], sum=0, delta=0x636f3268;
+    for (int i=0; i < num_rounds; i+=1) {
+        v0 += (((lshift32(v1, 9) ^ rshift32(v1, 6) ) + v1)) ^ ((sum + key[sum % 4]));
+        v0 %= 0x100000000;
+        sum += delta;
+        sum %= 0x100000000;
+        int tmp1 = (((lshift32(v0, 2) ^ rshift32(v0, 10)) + v0)) ;
+        int tmp2 = ((sum + key[rshift32(sum,11) % 4]));
+        v1 += tmp1 ^ tmp2;
+        v1 %= 0x100000000;
+    }
+    v[0]=v0; v[1]=v1;
+}
+
+void aggregate_input(int arr[], int aggr[]) {
+    for(int i=0;i<len(aggr);i+=1) {
+        aggr[i] = 0;
+    } 
+    for(int i=0;i<len(arr);i+=1) {
+        aggr[i/4] = aggr[i/4] | lshift32(arr[i], (i%4)*8);
+    }
+}
+
+void get_input(int arr[]) {
+    for(int i=0;i<len(arr);i+=1) {
+        int c = getchar();
+        if(c!='\n') arr[i] = c;
+        else break; 
+    }    
+}
+
+int verify(int arr[]) {
+    int aggr[8] = {0};
+    aggregate_input(arr, aggr);
+
+    int key[4] = {0x636f3268, 0x636f3268, 0x636f3268, 0x636f3268};
+    int target[8] = {1979671746, 897489479, 1099794343, 1301154413, 1769714755, 960071495, 1038852409, 3276753339};
+    for(int i=0;i<8/2;i+=1) {
+        int v[2] = {aggr[i*2], aggr[i*2+1]};
+        encipher(8, v, key);
+        aggr[i*2] = v[0];
+        aggr[i*2+1] = v[1];
+    }
+    int ok = 1;
+    for(int i=0;i<8;i+=1) {
+        if(aggr[i]!=target[i]) {
+            ok = 0;
+            break;
+        }
+    }
+    return ok;
+}
+
+int main(){
+    int arr[32] = {0};
+    @printf("******************************\n");
+    @printf("**   Welcome to N1CTF2023   **\n");
+    @printf("**       >>  h2o  <<        **\n");
+    @printf("**  a.k.a. Ancient Game V3  **\n");
+    @printf("******************************\n");
+    @printf("Input your flag: \n");
+    get_input(arr);
+    @printf("Verifying...\n");
+    int ret = verify(arr);
+    if(ret) {
+        @printf("OK!\n");
+    } else {
+        @printf("Try again.\n");
+    }
+    return 0;
+}
