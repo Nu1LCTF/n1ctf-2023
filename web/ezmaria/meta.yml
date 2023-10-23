@@ -1,0 +1,16 @@
+# 制作人信息
+author:
+  name: "lolita"
+  contact: "llt@xswl.io"
+# 环境信息
+task:
+  name: "challenge_2023_n1ctf_web_ezmaria/"
+  type: "Web"
+  description: "很简单的sql注入哦~"
+  level: "中等"
+  flag: ""
+  hints: []
+challenge:
+  name: ""
+  refer: ""
+  tags: []

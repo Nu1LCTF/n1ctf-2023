@@ -1,0 +1,10 @@
+version: '3'
+services:
+  pwn:
+    image: challenge_2023_n1ctf_web_ezmaria
+    build: app
+    ports:
+      - 8087:80
+    environment:
+      - FLAG=flag{testflag}
+      - DOMAIN=test.sandbox.ctfhub.com
